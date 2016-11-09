@@ -80,11 +80,14 @@ var yAxis = d3.svg.axis()
     .orient("left")
     .tickFormat(formatPercent);
 
+/* Sets tooltip text when user mouses over bar */
 var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
   .html(function(d) {
-    return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
+    var roundedPct = (d.pct * 100).toFixed(2);
+    return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span><br>" +
+           "<strong>Percent:</strong> <span style='color:red'>" + roundedPct + "%" + "</span>";
   })
 
 var svg = d3.select("body").append("svg")
@@ -95,9 +98,18 @@ var svg = d3.select("body").append("svg")
 
 svg.call(tip);
 
+/* The title */
+svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "15px") 
+        .style("text-decoration", "underline")  
+        .text("Summer Data Exp. #2 | Participant Age Demographics");
+
 d3.tsv("data/demo_age.tsv", type, function(error, data) {
   x.domain(data.map(function(d) { return d.category; }));
-  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+  y.domain([0, d3.max(data, function(d) { return d.pct; })]);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -120,15 +132,15 @@ d3.tsv("data/demo_age.tsv", type, function(error, data) {
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.category); })
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.frequency); })
-      .attr("height", function(d) { return height - y(d.frequency); })
+      .attr("y", function(d) { return y(d.pct); })
+      .attr("height", function(d) { return height - y(d.pct); })
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide)
 
 });
 
 function type(d) {
-  d.frequency = +d.frequency;
+  d.pct = +d.pct;
   return d;
 }
 
