@@ -86,8 +86,8 @@ var tip = d3.tip()
   .offset([-10, 0])
   .html(function(d) {
     var roundedPct = (d.pct * 100).toFixed(2);
-    return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span><br>" +
-           "<strong>Percent:</strong> <span style='color:red'>" + roundedPct + "%" + "</span>";
+    return "<strong>Frequency:</strong> <span style='color:orange'>" + d.frequency + "</span><br>" +
+           "<strong>Percent:</strong> <span style='color:orange'>" + roundedPct + "%" + "</span>";
   })
 
 var svg = d3.select("body").append("svg")
